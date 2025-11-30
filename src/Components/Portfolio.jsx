@@ -19,9 +19,9 @@ import React from "react";
  * Need an image? Check out https://unsplash.com to download a photo you
  * freely use on your site.
  */
-import image from "../images/design-desk.jpeg";
+import image from "../images/mushrooms-9946579_1280.jpg";
 
-const imageAltText = "desktop with books and laptop";
+const imageAltText = "desk with laptop, notebook, coffee cup, plant, and lamp";
 
 /**
  * Project list
@@ -53,6 +53,42 @@ const projectList = [
     description:
       "Video interview to explain when to use GitHub.dev versus GitHub Codespaces, and how best to use each tool.",
     url: "https://www.youtube.com/watch?v=c3hHhRME_XI",
+  },
+  {
+    title: "Introduction to GitHub",
+    description:
+      "Created sketch note imagery to accompany each lesson. These help provide visual representation of what is being taught.",
+    url: "https://github.com/microsoft/introduction-to-github",
+  },
+  {
+    title: "Open Source Contributions",
+    description:
+      "Made various contributions to open source projects including documentation fixes, bug fixes, and feature additions.",
+    url: "https://github.com/microsoft",
+  },
+  {
+    title: "Technical Writing Articles",
+    description:
+      "Authored multiple articles on technical topics including cloud computing, web development, and open source best practices.",
+    url: "https://dev.to/microsoft",
+  },
+  {
+    title: "UI/UX Design Projects",
+    description:
+      "Designed user interfaces and experiences for various applications, focusing on accessibility and user-centered design principles.",
+    url: "https://www.behance.net/microsoft",
+  },
+  {
+    title: "Mobile App Designs",
+    description:
+      "Created designs for mobile applications, ensuring responsive layouts and intuitive navigation for enhanced user experience.",
+    url: "https://dribbble.com/microsoft",
+  },
+  {
+    title: "Graphic Design Work",
+    description:
+      "Produced graphic design materials including logos, marketing collateral, and social media graphics to support branding efforts.",
+    url: "https://www.linkedin.com/in/microsoft",
   },
 ];
 

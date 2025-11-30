@@ -16,27 +16,29 @@ import React from "react";
  * Need an image? Check out https://unsplash.com to download a image you
  * freely use on your site.
  */
-import image from "../images/motion-background.jpg";
+import image from "../images/hanna-lazar-Cf5G0y0PR7E-unsplash.jpg";
 
-const imageAltText = "purple and blue abstract background";
+const imageAltText = "person typing on laptop keyboard with coffee cup nearby";
 
 /**
  * Sort description that expands on your title on the Home component.
  */
 const description =
-  "I'm a UI/UX student studying at Barnett Technical University. I enjoy creating unique and simplistic user interfaces in creative ways.";
+  "I am a data science and analytics enthusiast with a strong passion for uncovering insights from complex datasets. With a background in statistics and computer science, I specialize in machine learning, data visualization, and predictive modeling. I enjoy collaborating on projects that leverage data to drive informed decision-making and solve real-world problems.";
 
 /**
  * List of some of skills or technologies you work on, are learning,
  * passionate about, or enjoy,
  */
 const skillsList = [
-  "Web design",
-  "User experience",
-  "Inclusive design",
-  "Focus group testing",
-  "Mobile user interfaces",
-  "Graphic design",
+  "Data Analysis",
+  "Machine Learning",
+  "Statistical Modeling",
+  "Data Visualization",
+  "Python & R Programming",
+  "SQL & NoSQL Databases",
+  "Big Data Technologies",
+  "Cloud Computing",
 ];
 
 /**
@@ -45,7 +47,7 @@ const skillsList = [
  * about you on a professional level.
  */
 const detailOrQuote =
-  "I am passionate about solving problems in new creative ways to drive innovation. By leveraging my UI/UX experience I continually look for new and better ways to make tech accessible by all.";
+  "“Data is the new oil.” I believe that data has the power to transform businesses and societies. My goal is to harness this power to create meaningful impact through data-driven solutions.";
 
 const About = () => {
   return (
