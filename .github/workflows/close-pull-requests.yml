@@ -1,4 +1,5 @@
 name: Auto close pull requests
+
 on:
   pull_request_target:
     types: [opened, labeled, unlabeled, reopened]
@@ -8,18 +9,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Ensure GitHub CLI is available
-      run: gh --version
+    - name: Install GitHub CLI
+      uses: cli/cli@v2
 
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Close PR if not pre-approved
-      if: ${{ github.event.pull_request.number != '' &&
-              !(contains(github.event.pull_request.labels.*.name, 'pre-approved')) &&
-              !(contains(github.event.pull_request.body, '@alfredodeza')) }}
+      if: ${{ !(contains(github.event.pull_request.labels.*.name, 'pre-approved')) && !(contains(github.event.pull_request.body, '@alfredodeza')) }}
       run: |
-        MESSAGE="This repository doesn't accept pull requests. Please fork the repository and make changes there. If you really need this PR to be merged you must be an admin and label this pr with the 'pre-approved' label *or* tag Alfredo Deza (\`@alfredodeza\`) to take a look."
-        gh pr close ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --comment "$MESSAGE"
+        MESSAGE="This repository doesn't accept pull requests. Please fork the repository and make changes there. If you really need this PR to be merged you must be an admin and label this PR with the 'pre-approved' label *or* tag Alfredo Deza (\`@alfredodeza\`) to take a look."
+
+        # Load PR number from event payload
+        PR_NUMBER="${{ github.event.pull_request.number }}"
+
+        # If the PR number is missing (happens with forks), retrieve it manually
+        if [ -z "$PR_NUMBER" ]; then
+          echo "⚠ Event PR number is empty — fetching the PR number manually..."
+          PR_NUMBER=$(gh pr list --state open --json number --jq '.[0].number')
+        fi
+
+        echo "📌 Closing PR #$PR_NUMBER in repository: ${{ github.repository }}"
+
+        # Close the pull request
+        gh pr close "$PR_NUMBER" --repo ${{ github.repository }} --comment "$MESSAGE"
+
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
