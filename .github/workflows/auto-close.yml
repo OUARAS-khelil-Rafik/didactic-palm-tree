@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install GitHub CLI
-      uses: cli/cli@v2
-
+    # GitHub CLI is preinstalled in the dev container and available on PATH, so no install action is required.
     - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Close PR if not pre-approved
+      if: ${{ !(contains(github.event.pull_request.labels.*.name, 'pre-approved')) && !(contains(github.event.pull_request.body, '@alfredodeza')) }}
       shell: bash
       run: |
         MESSAGE="This repository doesn't accept pull requests. Please fork the repository and make changes there. If you really need this PR to be merged you must be an admin and label this PR with the 'pre-approved' label *or* tag Alfredo Deza (\`@alfredodeza\`) to take a look."
@@ -23,21 +22,24 @@ jobs:
         # Get PR number from event
         PR_NUMBER="${{ github.event.pull_request.number }}"
 
-        # Exit safely if there is no PR
+        echo "Event PR number: '$PR_NUMBER'"
+
+        # If empty → fetch from GitHub API (works for fork PRs)
         if [ -z "$PR_NUMBER" ]; then
-          echo "⚠ No pull request detected. Exiting safely."
+          echo "⚠ PR number missing — fetching manually..."
+          PR_NUMBER=$(gh pr list --state open --json number --jq '.[0].number')
+        fi
+
+        echo "📌 Using PR number: $PR_NUMBER"
+
+        # Safety: if STILL empty, abort gracefully instead of failing
+        if [ -z "$PR_NUMBER" ]; then
+          echo "❌ ERROR: Unable to determine PR number. Exiting safely."
           exit 0
         fi
 
-        # Check labels and body
-        LABELS="${{ github.event.pull_request.labels.*.name }}"
-        BODY="${{ github.event.pull_request.body }}"
+        # Close the PR
+        gh pr close "$PR_NUMBER" --repo ${{ github.repository }} --comment "$MESSAGE"
 
-        if [[ ! "$LABELS" =~ "pre-approved" && ! "$BODY" =~ "@alfredodeza" ]]; then
-          echo "📌 Closing PR #$PR_NUMBER"
-          gh pr close "$PR_NUMBER" --repo "${{ github.repository }}" --comment "$MESSAGE"
-        else
-          echo "✅ PR #$PR_NUMBER is pre-approved or mentions @alfredodeza. Skipping close."
-        fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
