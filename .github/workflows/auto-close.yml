@@ -20,20 +20,22 @@ jobs:
       run: |
         MESSAGE="This repository doesn't accept pull requests. Please fork the repository and make changes there. If you really need this PR to be merged you must be an admin and label this PR with the 'pre-approved' label *or* tag Alfredo Deza (\`@alfredodeza\`) to take a look."
 
+        # Get PR number from event
         PR_NUMBER="${{ github.event.pull_request.number }}"
 
-        # Exit safely if no PR exists
+        # Exit safely if there is no PR
         if [ -z "$PR_NUMBER" ]; then
-          echo "⚠ No PR number detected. Nothing to close. Exiting safely."
+          echo "⚠ No pull request detected. Exiting safely."
           exit 0
         fi
 
-        # Only close if the PR does not have the pre-approved label or mention
+        # Check labels and body
         LABELS="${{ github.event.pull_request.labels.*.name }}"
         BODY="${{ github.event.pull_request.body }}"
+
         if [[ ! "$LABELS" =~ "pre-approved" && ! "$BODY" =~ "@alfredodeza" ]]; then
           echo "📌 Closing PR #$PR_NUMBER"
-          gh pr close "$PR_NUMBER" --repo ${{ github.repository }} --comment "$MESSAGE"
+          gh pr close "$PR_NUMBER" --repo "${{ github.repository }}" --comment "$MESSAGE"
         else
           echo "✅ PR #$PR_NUMBER is pre-approved or mentions @alfredodeza. Skipping close."
         fi
